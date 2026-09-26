@@ -1,10 +1,10 @@
 import random
 import string
-
+ 
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardMarkup, InputMediaPhoto, Message
 from pytgcalls.exceptions import NoActiveGroupCall
-
+ 
 import config
 from ShrutixMusic import Apple, Resso, SoundCloud, Spotify, Telegram, YouTube, nand
 from ShrutixMusic.core.call import Shruti
@@ -24,8 +24,8 @@ from ShrutixMusic.utils.inline import (
 from ShrutixMusic.utils.logger import play_logs
 from ShrutixMusic.utils.stream.stream import stream
 from config import BANNED_USERS, lyrical
-
-
+ 
+ 
 @nand.on_message(
     filters.command(
         [
@@ -75,8 +75,8 @@ async def play_commnd(
                 await Shruti.prejoin_settle(chat_id)
             except Exception:
                 pass
-
-
+ 
+ 
 async def _wants_prejoin(message, chat_id, playmode, url):
     if str(playmode) != "Direct":
         return False
@@ -88,8 +88,8 @@ async def _wants_prejoin(message, chat_id, playmode, url):
     if url:
         return await YouTube.exists(url)
     return len(message.command) >= 2
-
-
+ 
+ 
 async def _play_flow(
     client,
     message: Message,
@@ -139,7 +139,7 @@ async def _play_flow(
                 "path": file_path,
                 "dur": dur,
             }
-
+ 
             try:
                 await stream(
                     _,
@@ -434,10 +434,8 @@ async def _play_flow(
                 "c" if channel else "g",
                 "f" if fplay else "d",
             )
-            await mystic.delete()
-            await message.reply_photo(
-                photo=img,
-                caption=cap,
+            await mystic.edit_media(
+                media=InputMediaPhoto(media=img, caption=cap),
                 reply_markup=InlineKeyboardMarkup(buttons),
             )
             return await play_logs(message, streamtype=f"Playlist : {plist_type}")
@@ -452,12 +450,13 @@ async def _play_flow(
                     "c" if channel else "g",
                     "f" if fplay else "d",
                 )
-                await mystic.delete()
-                await message.reply_photo(
-                    photo=details["thumb"],
-                    caption=_["play_10"].format(
-                        details["title"].title(),
-                        details["duration_min"],
+                await mystic.edit_media(
+                    media=InputMediaPhoto(
+                        media=details["thumb"],
+                        caption=_["play_10"].format(
+                            details["title"].title(),
+                            details["duration_min"],
+                        ),
                     ),
                     reply_markup=InlineKeyboardMarkup(buttons),
                 )
@@ -470,15 +469,13 @@ async def _play_flow(
                     "c" if channel else "g",
                     "f" if fplay else "d",
                 )
-                await mystic.delete()
-                await message.reply_photo(
-                    photo=img,
-                    caption=cap,
+                await mystic.edit_media(
+                    media=InputMediaPhoto(media=img, caption=cap),
                     reply_markup=InlineKeyboardMarkup(buttons),
                 )
                 return await play_logs(message, streamtype=f"URL Searched Inline")
-
-
+ 
+ 
 @nand.on_callback_query(filters.regex("MusicStream") & ~BANNED_USERS)
 @languageCB
 async def play_music(client, CallbackQuery, _):
@@ -513,8 +510,8 @@ async def play_music(client, CallbackQuery, _):
                 await Shruti.prejoin_settle(chat_id)
             except Exception:
                 pass
-
-
+ 
+ 
 async def _play_music_flow(
     _, CallbackQuery, vidid, mode, cplay, fplay, chat_id, channel, user_name
 ):
@@ -564,8 +561,8 @@ async def _play_music_flow(
         err = e if ex_type == "AssistantErr" else _["general_2"].format(f"{ex_type}: {e}")
         return await mystic.edit_text(err)
     return
-
-
+ 
+ 
 @nand.on_callback_query(filters.regex("ShrutimousAdmin") & ~BANNED_USERS)
 async def Shrutimous_check(client, CallbackQuery):
     try:
@@ -575,8 +572,8 @@ async def Shrutimous_check(client, CallbackQuery):
         )
     except:
         pass
-
-
+ 
+ 
 @nand.on_callback_query(filters.regex("ShrutiPlaylists") & ~BANNED_USERS)
 @languageCB
 async def play_playlists_command(client, CallbackQuery, _):
@@ -662,8 +659,8 @@ async def play_playlists_command(client, CallbackQuery, _):
         err = e if ex_type == "AssistantErr" else _["general_2"].format(f"{ex_type}: {e}")
         return await mystic.edit_text(err)
     return
-
-
+ 
+ 
 @nand.on_callback_query(filters.regex("slider") & ~BANNED_USERS)
 @languageCB
 async def slider_queries(client, CallbackQuery, _):
@@ -726,3 +723,4 @@ async def slider_queries(client, CallbackQuery, _):
         return await CallbackQuery.edit_message_media(
             media=med, reply_markup=InlineKeyboardMarkup(buttons)
         )
+ 
