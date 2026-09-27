@@ -434,10 +434,8 @@ async def _play_flow(
                 "c" if channel else "g",
                 "f" if fplay else "d",
             )
-            await mystic.delete()
-            await message.reply_photo(
-                photo=img,
-                caption=cap,
+            await mystic.edit_media(
+                media=InputMediaPhoto(media=img, caption=cap),
                 reply_markup=InlineKeyboardMarkup(buttons),
             )
             return await play_logs(message, streamtype=f"Playlist : {plist_type}")
@@ -452,12 +450,13 @@ async def _play_flow(
                     "c" if channel else "g",
                     "f" if fplay else "d",
                 )
-                await mystic.delete()
-                await message.reply_photo(
-                    photo=details["thumb"],
-                    caption=_["play_10"].format(
-                        details["title"].title(),
-                        details["duration_min"],
+                await mystic.edit_media(
+                    media=InputMediaPhoto(
+                        media=details["thumb"],
+                        caption=_["play_10"].format(
+                            details["title"].title(),
+                            details["duration_min"],
+                        ),
                     ),
                     reply_markup=InlineKeyboardMarkup(buttons),
                 )
@@ -470,10 +469,8 @@ async def _play_flow(
                     "c" if channel else "g",
                     "f" if fplay else "d",
                 )
-                await mystic.delete()
-                await message.reply_photo(
-                    photo=img,
-                    caption=cap,
+                await mystic.edit_media(
+                    media=InputMediaPhoto(media=img, caption=cap),
                     reply_markup=InlineKeyboardMarkup(buttons),
                 )
                 return await play_logs(message, streamtype=f"URL Searched Inline")
